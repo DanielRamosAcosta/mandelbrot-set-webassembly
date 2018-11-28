@@ -1,0 +1,12 @@
+[package]
+name = "mandelbrot"
+version = "0.1.0"
+authors = ["Daniel Ramos <danielramosacosta@hotmail.com>"]
+edition = "2018"
+
+[lib]
+path = "src/domain_rust/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
