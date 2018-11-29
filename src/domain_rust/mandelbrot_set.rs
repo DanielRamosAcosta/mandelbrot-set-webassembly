@@ -50,10 +50,10 @@ impl MandelbrotSet {
         };
     }
 
-    // pub fn min_corner_a () -> { return this.min_corner.getA().toString() }
-    // pub fn min_corner_b () -> { return this.min_corner.getB().toString() }
-    // pub fn max_corner_a () -> { return this.max_corner.getA().toString() }
-    // pub fn max_corner_b () -> { return this.max_corner.getB().toString() }
+    pub fn min_corner_a (&self) -> String { return self.min_corner.get_a().to_string() }
+    pub fn min_corner_b (&self) -> String { return self.min_corner.get_b().to_string() }
+    pub fn max_corner_a (&self) -> String { return self.max_corner.get_a().to_string() }
+    pub fn max_corner_b (&self) -> String { return self.max_corner.get_b().to_string() }
 
 
     pub fn zoom_canvas (&mut self, start_x_px: u16, end_x_px: u16, start_y_px: u16, end_y_px: u16) {

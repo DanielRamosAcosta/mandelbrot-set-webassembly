@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 
 import classes from './MandelbrotVisualizer.module.css'
-import { MandelbrotSet } from "../../domain_ts/MandelbrotSet";
+// import { MandelbrotSet } from "../../domain_ts/MandelbrotSet";
 import { CanvasPixelDrawer } from "./utils/CanvasPixelDrawer";
 import RegionSelectableCanvas from "../RegionSelectableCanvas/RegionSelectableCanvas";
 import { Color } from "../../domain_ts/Color";
+import { MandelbrotSet } from "../../domain_wasm/mandelbrot";
 
-const js = import('../../domain_wasm/mandelbrot')
+const MandelbrotModule = import('../../domain_wasm/mandelbrot')
 
 interface MandelbrotVisualizerProps {
   maxIterations: number
@@ -34,47 +35,41 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
   }
 
   onRef = (canvas: HTMLCanvasElement) => {
-    this.mandelbrotSet = new MandelbrotSet(canvas.width, canvas.height)
     this.canvasPixelDrawer = new CanvasPixelDrawer(canvas)
     this.canvasCtx = canvas.getContext('2d') as CanvasRenderingContext2D 
 
-    js.then(({ MandelbrotSet }) => {
-      const foo = new MandelbrotSet(canvas.width, canvas.height)
-      foo.render()
-      
-      // const r = foo.get_color_r(0, 0)
-      // const g = foo.get_color_g(0, 0)
-      // const b = foo.get_color_b(0, 0)
-
-      for(let i = 0; i < this.canvasPixelDrawer.getWidth(); i++) {
-        for(let j = 0; j < this.canvasPixelDrawer.getHeight(); j++) {
-          this.canvasPixelDrawer.setColor(i, j, new Color(
-            foo.get_color_r(i, j),
-            foo.get_color_g(i, j),
-            foo.get_color_b(i, j)
-          ))
-        }
-      }
+    MandelbrotModule.then(({ MandelbrotSet }) => {
+      this.mandelbrotSet = new MandelbrotSet(canvas.width, canvas.height)
+      this.mandelbrotSet.render()
       this.refreshCanvas()
     })    
   };
 
   private onChangeSelectedRegion = (startXPx: number, endXPx: number, startYPx: number, endYPx: number) => {
-    this.mandelbrotSet.zoomCanvas(startXPx, endXPx, startYPx, endYPx)
+    this.mandelbrotSet.zoom_canvas(startXPx, endXPx, startYPx, endYPx)
     this.refreshCanvas()
   }
 
   private refreshCanvas () {
     this.props.onChangeBounds(
-      this.mandelbrotSet.minCornerA(), 
-      this.mandelbrotSet.minCornerB(),
-      this.mandelbrotSet.maxCornerA(), 
-      this.mandelbrotSet.maxCornerB()
+      this.mandelbrotSet.min_corner_a(), 
+      this.mandelbrotSet.min_corner_b(),
+      this.mandelbrotSet.max_corner_a(), 
+      this.mandelbrotSet.max_corner_b()
     )
     setTimeout(() => {
-      /* this.mandelbrotSet.render(this.canvasPixelDrawer, {
-        maxIterations: this.props.maxIterations
-      }) */
+      console.time("RENDER")
+      this.mandelbrotSet.render()
+      console.timeEnd("RENDER")
+      for(let i = 0; i < this.canvasPixelDrawer.getWidth(); i++) {
+        for(let j = 0; j < this.canvasPixelDrawer.getHeight(); j++) {
+          this.canvasPixelDrawer.setColor(i, j, new Color(
+            this.mandelbrotSet.get_color_r(i, j),
+            this.mandelbrotSet.get_color_g(i, j),
+            this.mandelbrotSet.get_color_b(i, j)
+          ))
+        }
+      }
       this.canvasCtx.putImageData(this.canvasPixelDrawer.toImageData(), 0, 0);
     }, 50)
   }
