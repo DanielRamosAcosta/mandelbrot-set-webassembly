@@ -15,7 +15,7 @@ fn scale(value: f64, left_min: f64, left_max: f64, right_min: f64, right_max: f6
   return right_min + (value_scaled * right_span);
 }
 
-fn iterations_to_color(n: u8, max_iterations: u8) -> Color {
+fn iterations_to_color(n: u32, max_iterations: u32) -> Color {
   if n == max_iterations {
     return Color::new(0, 0, 0);
   }
@@ -64,7 +64,7 @@ impl MandelbrotSet {
         self.max_corner = Complex::new(max_corner_a, max_corner_b);
     }
 
-    fn iterations_until_it_escapes(&self, c: Complex, max_iterations: u8) -> u8 {
+    fn iterations_until_it_escapes(&self, c: Complex, max_iterations: u32) -> u32 {
         let mut z = Complex::new(0.0, 0.0);
         
         for n in 0..max_iterations {
@@ -80,7 +80,7 @@ impl MandelbrotSet {
     pub fn render(&mut self, ctx: &CanvasRenderingContext2d) -> Result<(), JsValue> {
         let min_corner = &self.min_corner;
         let max_corner = &self.max_corner;
-        let max_iterations = 100;
+        let max_iterations: u32 = 500;
         let height = self.height as u32;
         let width = self.width as u32;
         
