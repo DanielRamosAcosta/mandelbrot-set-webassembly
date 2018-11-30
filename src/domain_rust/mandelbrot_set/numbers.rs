@@ -13,7 +13,7 @@ impl Complex {
     }
 
     pub fn square(&self) -> Complex {
-        let a = self.a.powf(2.0) - self.b.powf(2.0);
+        let a = (self.a * self.a) - (self.b * self.b);
         let b = 2.0 * self.a * self.b;
         return Complex::new(a, b);
     }

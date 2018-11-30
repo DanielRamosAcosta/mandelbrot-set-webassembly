@@ -17,6 +17,11 @@ function getStringFromWasm(ptr, len) {
     return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
 }
 
+export function __wbg_log_c801d84ad6d2e8a7(arg0, arg1) {
+    let varg0 = getStringFromWasm(arg0, arg1);
+    console.log(varg0);
+}
+
 let cachedGlobalArgumentPtr = null;
 function globalArgumentPtr() {
     if (cachedGlobalArgumentPtr === null) {
@@ -102,6 +107,56 @@ export function __widl_f_new_with_u8_clamped_array_and_sh_ImageData(arg0, arg1, 
         view[exnptr / 4] = 1;
         view[exnptr / 4 + 1] = addHeapObject(e);
 
+    }
+}
+
+function freeColor(ptr) {
+
+    wasm.__wbg_color_free(ptr);
+}
+/**
+*/
+export class Color {
+
+    static __wrap(ptr) {
+        const obj = Object.create(Color.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeColor(ptr);
+    }
+
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @param {number} arg2
+    * @returns {Color}
+    */
+    static new(arg0, arg1, arg2) {
+        return Color.__wrap(wasm.color_new(arg0, arg1, arg2));
+    }
+    /**
+    * @returns {number}
+    */
+    get_r() {
+        return wasm.color_get_r(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_g() {
+        return wasm.color_get_g(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_b() {
+        return wasm.color_get_b(this.ptr);
     }
 }
 
@@ -269,30 +324,6 @@ export class MandelbrotSet {
         return wasm.mandelbrotset_zoom_canvas(this.ptr, arg0, arg1, arg2, arg3);
     }
     /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_r(arg0, arg1) {
-        return wasm.mandelbrotset_get_color_r(this.ptr, arg0, arg1);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_g(arg0, arg1) {
-        return wasm.mandelbrotset_get_color_g(this.ptr, arg0, arg1);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_b(arg0, arg1) {
-        return wasm.mandelbrotset_get_color_b(this.ptr, arg0, arg1);
-    }
-    /**
     * @param {any} arg0
     * @returns {void}
     */
@@ -305,56 +336,6 @@ export class MandelbrotSet {
 
         }
 
-    }
-}
-
-function freeColor(ptr) {
-
-    wasm.__wbg_color_free(ptr);
-}
-/**
-*/
-export class Color {
-
-    static __wrap(ptr) {
-        const obj = Object.create(Color.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    free() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-        freeColor(ptr);
-    }
-
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @param {number} arg2
-    * @returns {Color}
-    */
-    static new(arg0, arg1, arg2) {
-        return Color.__wrap(wasm.color_new(arg0, arg1, arg2));
-    }
-    /**
-    * @returns {number}
-    */
-    get_r() {
-        return wasm.color_get_r(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_g() {
-        return wasm.color_get_g(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_b() {
-        return wasm.color_get_b(this.ptr);
     }
 }
 

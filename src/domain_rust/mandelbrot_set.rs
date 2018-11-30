@@ -11,6 +11,32 @@ use self::numbers::Complex;
 use self::color::Color;
 use self::render_data_storage::RenderDataStorage;
 
+#[wasm_bindgen]
+extern "C" {
+    // Use `js_namespace` here to bind `console.log(..)` instead of just
+    // `log(..)`
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+
+    // The `console.log` is quite polymorphic, so we can bind it with multiple
+    // signatures. Note that we need to use `js_name` to ensure we always call
+    // `log` in JS.
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_u32(a: u32);
+
+    // Multiple arguments too!
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_many(a: &str, b: &str);
+}
+
+macro_rules! console_log {
+    // Note that this is using the `log` function imported above during
+    // `bare_bones`
+    ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
+}
+
+
+
 
 fn scale(value: f64, left_min: f64, left_max: f64, right_min: f64, right_max: f64) -> f64 {
   let left_span = left_max - left_min;
@@ -35,7 +61,6 @@ pub struct MandelbrotSet {
   max_corner: Complex,
   width: f64,
   height: f64,
-  data_storage: RenderDataStorage,
 }
 
 #[wasm_bindgen]
@@ -48,7 +73,6 @@ impl MandelbrotSet {
         return MandelbrotSet {
             width,
             height,
-            data_storage: RenderDataStorage::new(width as usize, height as usize),
             max_corner: Complex::new(initial_width, initial_width * ratio),
             min_corner: Complex::new(-initial_width, -initial_width * ratio)
         };
@@ -83,32 +107,22 @@ impl MandelbrotSet {
         return max_iterations;
     }
 
-    pub fn get_color_r (&self, x: usize, y: usize) -> u8 {
-        self.data_storage.get_color_b(x, y)
-    }
-
-    pub fn get_color_g (&self, x: usize, y: usize) -> u8 {
-        self.data_storage.get_color_g(x, y)
-    }
-
-    pub fn get_color_b (&self, x: usize, y: usize) -> u8 {
-        self.data_storage.get_color_b(x, y)
-    }
-
     pub fn render(&mut self, ctx: &CanvasRenderingContext2d) -> Result<(), JsValue> {
         let min_corner = &self.min_corner;
         let max_corner = &self.max_corner;
         let max_iterations = 100;
+        let height = self.height as u32;
+        let width = self.width as u32;
         
         let mut data = Vec::new();
 
-        for y in 0..self.data_storage.get_height() {
-            for x in 0..self.data_storage.get_width() {
+        for y in 0..height {
+            for x in 0..width {
                 // console_log!("Hello world [{} {}]!", x, y);
 
                 let c = Complex::new(
-                    scale(x as f64, 0.0, self.data_storage.get_width() as f64, min_corner.get_a(), max_corner.get_a()),
-                    scale(y as f64, 0.0, self.data_storage.get_height() as f64, min_corner.get_b(), max_corner.get_b())
+                    scale(x as f64, 0.0, self.width, min_corner.get_a(), max_corner.get_a()),
+                    scale(y as f64, 0.0, self.height, min_corner.get_b(), max_corner.get_b())
                 );
         
                 let n = self.iterations_until_it_escapes(c, max_iterations);
@@ -117,12 +131,12 @@ impl MandelbrotSet {
                 data.push(color.get_g(),);
                 data.push(color.get_b());
                 data.push(255);
-                // console_log!("R: {}", self.data_storage.get_color_r(x, y));
-                // console_log!("G: {}", self.data_storage.get_color_g(x, y));
-                // console_log!("B: {}", self.data_storage.get_color_b(x, y));
             }
         }
-        let data = ImageData::new_with_u8_clamped_array_and_sh(Clamped(&mut data), self.data_storage.get_width() as u32, self.data_storage.get_height() as u32)?;
+
+
+        console_log!("El tamaño del vector es, {}", data.len());
+        let data = ImageData::new_with_u8_clamped_array_and_sh(Clamped(&mut data), width, height)?;
         ctx.put_image_data(&data, 0.0, 0.0)
     }
 }
