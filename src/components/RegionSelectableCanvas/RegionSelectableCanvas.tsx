@@ -136,8 +136,8 @@ class RegionSelectableCanvas extends Component<RegionSelectableCanvasProps> {
       <canvas
         id="canvas"
         ref={this.onRef}
-        width={1000}
-        height={1000}
+        width={window.innerWidth}
+        height={window.innerHeight}
         className={this.props.className}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}

@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 
 import classes from './MandelbrotVisualizer.module.css'
-// import { MandelbrotSet } from "../../domain_ts/MandelbrotSet";
-import { CanvasPixelDrawer } from "./utils/CanvasPixelDrawer";
 import RegionSelectableCanvas from "../RegionSelectableCanvas/RegionSelectableCanvas";
-import { Color } from "../../domain_ts/Color";
 
 import { MandelbrotSet } from '../../domain_wasm/mandelbrot';
 const MandelbrotModule = import('../../domain_wasm/mandelbrot')
@@ -17,14 +14,12 @@ interface MandelbrotVisualizerProps {
 
 class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
   private mandelbrotSet: MandelbrotSet
-  private canvasPixelDrawer: CanvasPixelDrawer
   private canvasCtx: CanvasRenderingContext2D
 
   constructor (props: any) {
     super(props)
 
     this.mandelbrotSet = null as any as MandelbrotSet
-    this.canvasPixelDrawer = null as any as CanvasPixelDrawer
     this.canvasCtx = null as any as CanvasRenderingContext2D
   }
 
@@ -35,7 +30,6 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
   }
 
   onRef = (canvas: HTMLCanvasElement) => {
-    this.canvasPixelDrawer = new CanvasPixelDrawer(canvas)
     this.canvasCtx = canvas.getContext('2d') as CanvasRenderingContext2D 
 
     MandelbrotModule.then(({ MandelbrotSet }) => {
@@ -60,17 +54,6 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
       console.time("RENDER")
       this.mandelbrotSet.render(this.canvasCtx)
       console.timeEnd("RENDER")
-      /*
-      for(let i = 0; i < this.canvasPixelDrawer.getWidth(); i++) {
-        for(let j = 0; j < this.canvasPixelDrawer.getHeight(); j++) {
-          this.canvasPixelDrawer.setColor(i, j, new Color(
-            this.mandelbrotSet.get_color_r(i, j),
-            this.mandelbrotSet.get_color_g(i, j),
-            this.mandelbrotSet.get_color_b(i, j)
-          ))
-        }
-      }
-      this.canvasCtx.putImageData(this.canvasPixelDrawer.toImageData(), 0, 0);*/
     }, 50)
   }
 
