@@ -1,4 +1,7 @@
 use wasm_bindgen::prelude::*;
+use std::ops::Add;
+use wasm_bindgen::Clamped;
+use web_sys::{CanvasRenderingContext2d, ImageData};
 
 mod numbers;
 mod color;
@@ -7,6 +10,7 @@ mod render_data_storage;
 use self::numbers::Complex;
 use self::color::Color;
 use self::render_data_storage::RenderDataStorage;
+
 
 fn scale(value: f64, left_min: f64, left_max: f64, right_min: f64, right_max: f64) -> f64 {
   let left_span = left_max - left_min;
@@ -90,13 +94,14 @@ impl MandelbrotSet {
     pub fn get_color_b (&self, x: usize, y: usize) -> u8 {
         self.data_storage.get_color_b(x, y)
     }
-        
 
-    pub fn render(&mut self) -> u8 {
+    pub fn render(&mut self, ctx: &CanvasRenderingContext2d) -> Result<(), JsValue> {
         let min_corner = &self.min_corner;
         let max_corner = &self.max_corner;
         let max_iterations = 100;
-        // log("Hello world 1!");
+        
+        let mut data = Vec::new();
+
         for y in 0..self.data_storage.get_height() {
             for x in 0..self.data_storage.get_width() {
                 // console_log!("Hello world [{} {}]!", x, y);
@@ -108,13 +113,16 @@ impl MandelbrotSet {
         
                 let n = self.iterations_until_it_escapes(c, max_iterations);
                 let color = iterations_to_color(n, max_iterations);
-                self.data_storage.set_color(x, y, color.get_r(), color.get_g(), color.get_b());
+                data.push(color.get_r());
+                data.push(color.get_g(),);
+                data.push(color.get_b());
+                data.push(255);
                 // console_log!("R: {}", self.data_storage.get_color_r(x, y));
                 // console_log!("G: {}", self.data_storage.get_color_g(x, y));
                 // console_log!("B: {}", self.data_storage.get_color_b(x, y));
             }
         }
-        // log("Hello world!");
-        return 32;
+        let data = ImageData::new_with_u8_clamped_array_and_sh(Clamped(&mut data), self.data_storage.get_width() as u32, self.data_storage.get_height() as u32)?;
+        ctx.put_image_data(&data, 0.0, 0.0)
     }
 }

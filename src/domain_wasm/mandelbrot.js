@@ -33,6 +33,149 @@ function getUint32Memory() {
     return cachegetUint32Memory;
 }
 
+const stack = [];
+
+function addBorrowedObject(obj) {
+    stack.push(obj);
+    return ((stack.length - 1) << 1) | 1;
+}
+
+const __widl_f_put_image_data_CanvasRenderingContext2D_target = typeof CanvasRenderingContext2D === 'undefined' ? null : CanvasRenderingContext2D.prototype.putImageData || function() {
+    throw new Error(`wasm-bindgen: CanvasRenderingContext2D.putImageData does not exist`);
+};
+
+const slab = [{ obj: undefined }, { obj: null }, { obj: true }, { obj: false }];
+
+let slab_next = slab.length;
+
+function addHeapObject(obj) {
+    if (slab_next === slab.length) slab.push(slab.length + 1);
+    const idx = slab_next;
+    const next = slab[idx];
+
+    slab_next = next;
+
+    slab[idx] = { obj, cnt: 1 };
+    return idx << 1;
+}
+
+function getObject(idx) {
+    if ((idx & 1) === 1) {
+        return stack[idx >> 1];
+    } else {
+        const val = slab[idx >> 1];
+
+        return val.obj;
+
+    }
+}
+
+export function __widl_f_put_image_data_CanvasRenderingContext2D(arg0, arg1, arg2, arg3, exnptr) {
+    try {
+        __widl_f_put_image_data_CanvasRenderingContext2D_target.call(getObject(arg0), getObject(arg1), arg2, arg3);
+    } catch (e) {
+        const view = getUint32Memory();
+        view[exnptr / 4] = 1;
+        view[exnptr / 4 + 1] = addHeapObject(e);
+
+    }
+}
+
+let cachegetUint8ClampedMemory = null;
+function getUint8ClampedMemory() {
+    if (cachegetUint8ClampedMemory === null || cachegetUint8ClampedMemory.buffer !== wasm.memory.buffer) {
+        cachegetUint8ClampedMemory = new Uint8ClampedArray(wasm.memory.buffer);
+    }
+    return cachegetUint8ClampedMemory;
+}
+
+function getClampedArrayU8FromWasm(ptr, len) {
+    return getUint8ClampedMemory().subarray(ptr / 1, ptr / 1 + len);
+}
+
+export function __widl_f_new_with_u8_clamped_array_and_sh_ImageData(arg0, arg1, arg2, arg3, exnptr) {
+    let varg0 = getClampedArrayU8FromWasm(arg0, arg1);
+    try {
+        return addHeapObject(new ImageData(varg0, arg2, arg3));
+    } catch (e) {
+        const view = getUint32Memory();
+        view[exnptr / 4] = 1;
+        view[exnptr / 4 + 1] = addHeapObject(e);
+
+    }
+}
+
+function freeRenderDataStorage(ptr) {
+
+    wasm.__wbg_renderdatastorage_free(ptr);
+}
+/**
+*/
+export class RenderDataStorage {
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeRenderDataStorage(ptr);
+    }
+
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @returns {}
+    */
+    constructor(arg0, arg1) {
+        this.ptr = wasm.renderdatastorage_new(arg0, arg1);
+    }
+    /**
+    * @returns {number}
+    */
+    get_width() {
+        return wasm.renderdatastorage_get_width(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_height() {
+        return wasm.renderdatastorage_get_height(this.ptr);
+    }
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @returns {number}
+    */
+    get_color_r(arg0, arg1) {
+        return wasm.renderdatastorage_get_color_r(this.ptr, arg0, arg1);
+    }
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @returns {number}
+    */
+    get_color_g(arg0, arg1) {
+        return wasm.renderdatastorage_get_color_g(this.ptr, arg0, arg1);
+    }
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @returns {number}
+    */
+    get_color_b(arg0, arg1) {
+        return wasm.renderdatastorage_get_color_b(this.ptr, arg0, arg1);
+    }
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @param {number} arg2
+    * @param {number} arg3
+    * @param {number} arg4
+    * @returns {void}
+    */
+    set_color(arg0, arg1, arg2, arg3, arg4) {
+        return wasm.renderdatastorage_set_color(this.ptr, arg0, arg1, arg2, arg3, arg4);
+    }
+}
+
 function freeMandelbrotSet(ptr) {
 
     wasm.__wbg_mandelbrotset_free(ptr);
@@ -150,10 +293,18 @@ export class MandelbrotSet {
         return wasm.mandelbrotset_get_color_b(this.ptr, arg0, arg1);
     }
     /**
-    * @returns {number}
+    * @param {any} arg0
+    * @returns {void}
     */
-    render() {
-        return wasm.mandelbrotset_render(this.ptr);
+    render(arg0) {
+        try {
+            return wasm.mandelbrotset_render(this.ptr, addBorrowedObject(arg0));
+
+        } finally {
+            stack.pop();
+
+        }
+
     }
 }
 
@@ -207,76 +358,31 @@ export class Color {
     }
 }
 
-function freeRenderDataStorage(ptr) {
+function dropRef(idx) {
 
-    wasm.__wbg_renderdatastorage_free(ptr);
+    idx = idx >> 1;
+    if (idx < 4) return;
+    let obj = slab[idx];
+
+    obj.cnt -= 1;
+    if (obj.cnt > 0) return;
+
+    // If we hit 0 then free up our space in the slab
+    slab[idx] = slab_next;
+    slab_next = idx;
 }
-/**
-*/
-export class RenderDataStorage {
 
-    free() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-        freeRenderDataStorage(ptr);
-    }
-
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {}
-    */
-    constructor(arg0, arg1) {
-        this.ptr = wasm.renderdatastorage_new(arg0, arg1);
-    }
-    /**
-    * @returns {number}
-    */
-    get_width() {
-        return wasm.renderdatastorage_get_width(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_height() {
-        return wasm.renderdatastorage_get_height(this.ptr);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_r(arg0, arg1) {
-        return wasm.renderdatastorage_get_color_r(this.ptr, arg0, arg1);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_g(arg0, arg1) {
-        return wasm.renderdatastorage_get_color_g(this.ptr, arg0, arg1);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_b(arg0, arg1) {
-        return wasm.renderdatastorage_get_color_b(this.ptr, arg0, arg1);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @param {number} arg2
-    * @param {number} arg3
-    * @param {number} arg4
-    * @returns {void}
-    */
-    set_color(arg0, arg1, arg2, arg3, arg4) {
-        return wasm.renderdatastorage_set_color(this.ptr, arg0, arg1, arg2, arg3, arg4);
-    }
+export function __wbindgen_object_drop_ref(i) {
+    dropRef(i);
 }
+
+function takeObject(idx) {
+    const ret = getObject(idx);
+    dropRef(idx);
+    return ret;
+}
+
+export function __wbindgen_rethrow(idx) { throw takeObject(idx); }
 
 export function __wbindgen_throw(ptr, len) {
     throw new Error(getStringFromWasm(ptr, len));

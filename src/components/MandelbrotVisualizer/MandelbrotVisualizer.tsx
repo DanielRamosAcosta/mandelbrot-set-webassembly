@@ -5,8 +5,8 @@ import classes from './MandelbrotVisualizer.module.css'
 import { CanvasPixelDrawer } from "./utils/CanvasPixelDrawer";
 import RegionSelectableCanvas from "../RegionSelectableCanvas/RegionSelectableCanvas";
 import { Color } from "../../domain_ts/Color";
-import { MandelbrotSet } from "../../domain_wasm/mandelbrot";
 
+import { MandelbrotSet } from '../../domain_wasm/mandelbrot';
 const MandelbrotModule = import('../../domain_wasm/mandelbrot')
 
 interface MandelbrotVisualizerProps {
@@ -40,7 +40,6 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
 
     MandelbrotModule.then(({ MandelbrotSet }) => {
       this.mandelbrotSet = new MandelbrotSet(canvas.width, canvas.height)
-      this.mandelbrotSet.render()
       this.refreshCanvas()
     })    
   };
@@ -59,8 +58,9 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
     )
     setTimeout(() => {
       console.time("RENDER")
-      this.mandelbrotSet.render()
+      this.mandelbrotSet.render(this.canvasCtx)
       console.timeEnd("RENDER")
+      /*
       for(let i = 0; i < this.canvasPixelDrawer.getWidth(); i++) {
         for(let j = 0; j < this.canvasPixelDrawer.getHeight(); j++) {
           this.canvasPixelDrawer.setColor(i, j, new Color(
@@ -70,7 +70,7 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
           ))
         }
       }
-      this.canvasCtx.putImageData(this.canvasPixelDrawer.toImageData(), 0, 0);
+      this.canvasCtx.putImageData(this.canvasPixelDrawer.toImageData(), 0, 0);*/
     }, 50)
   }
 
