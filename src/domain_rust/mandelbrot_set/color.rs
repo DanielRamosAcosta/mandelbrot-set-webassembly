@@ -26,4 +26,7 @@ impl Color {
     pub fn get_b(&self) -> u8 {
         self.b
     }
+    pub fn get_alpha(&self) -> u8 {
+        255
+    }
 }

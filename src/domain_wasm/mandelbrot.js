@@ -17,11 +17,6 @@ function getStringFromWasm(ptr, len) {
     return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
 }
 
-export function __wbg_log_c801d84ad6d2e8a7(arg0, arg1) {
-    let varg0 = getStringFromWasm(arg0, arg1);
-    console.log(varg0);
-}
-
 let cachedGlobalArgumentPtr = null;
 function globalArgumentPtr() {
     if (cachedGlobalArgumentPtr === null) {
@@ -107,127 +102,6 @@ export function __widl_f_new_with_u8_clamped_array_and_sh_ImageData(arg0, arg1, 
         view[exnptr / 4] = 1;
         view[exnptr / 4 + 1] = addHeapObject(e);
 
-    }
-}
-
-function freeColor(ptr) {
-
-    wasm.__wbg_color_free(ptr);
-}
-/**
-*/
-export class Color {
-
-    static __wrap(ptr) {
-        const obj = Object.create(Color.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    free() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-        freeColor(ptr);
-    }
-
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @param {number} arg2
-    * @returns {Color}
-    */
-    static new(arg0, arg1, arg2) {
-        return Color.__wrap(wasm.color_new(arg0, arg1, arg2));
-    }
-    /**
-    * @returns {number}
-    */
-    get_r() {
-        return wasm.color_get_r(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_g() {
-        return wasm.color_get_g(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_b() {
-        return wasm.color_get_b(this.ptr);
-    }
-}
-
-function freeRenderDataStorage(ptr) {
-
-    wasm.__wbg_renderdatastorage_free(ptr);
-}
-/**
-*/
-export class RenderDataStorage {
-
-    free() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-        freeRenderDataStorage(ptr);
-    }
-
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {}
-    */
-    constructor(arg0, arg1) {
-        this.ptr = wasm.renderdatastorage_new(arg0, arg1);
-    }
-    /**
-    * @returns {number}
-    */
-    get_width() {
-        return wasm.renderdatastorage_get_width(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_height() {
-        return wasm.renderdatastorage_get_height(this.ptr);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_r(arg0, arg1) {
-        return wasm.renderdatastorage_get_color_r(this.ptr, arg0, arg1);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_g(arg0, arg1) {
-        return wasm.renderdatastorage_get_color_g(this.ptr, arg0, arg1);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @returns {number}
-    */
-    get_color_b(arg0, arg1) {
-        return wasm.renderdatastorage_get_color_b(this.ptr, arg0, arg1);
-    }
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @param {number} arg2
-    * @param {number} arg3
-    * @param {number} arg4
-    * @returns {void}
-    */
-    set_color(arg0, arg1, arg2, arg3, arg4) {
-        return wasm.renderdatastorage_set_color(this.ptr, arg0, arg1, arg2, arg3, arg4);
     }
 }
 
@@ -336,6 +210,62 @@ export class MandelbrotSet {
 
         }
 
+    }
+}
+
+function freeColor(ptr) {
+
+    wasm.__wbg_color_free(ptr);
+}
+/**
+*/
+export class Color {
+
+    static __wrap(ptr) {
+        const obj = Object.create(Color.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeColor(ptr);
+    }
+
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @param {number} arg2
+    * @returns {Color}
+    */
+    static new(arg0, arg1, arg2) {
+        return Color.__wrap(wasm.color_new(arg0, arg1, arg2));
+    }
+    /**
+    * @returns {number}
+    */
+    get_r() {
+        return wasm.color_get_r(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_g() {
+        return wasm.color_get_g(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_b() {
+        return wasm.color_get_b(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_alpha() {
+        return wasm.color_get_alpha(this.ptr);
     }
 }
 

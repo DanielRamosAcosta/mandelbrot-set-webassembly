@@ -1,42 +1,12 @@
 use wasm_bindgen::prelude::*;
-use std::ops::Add;
 use wasm_bindgen::Clamped;
 use web_sys::{CanvasRenderingContext2d, ImageData};
 
 mod numbers;
 mod color;
-mod render_data_storage;
 
 use self::numbers::Complex;
 use self::color::Color;
-use self::render_data_storage::RenderDataStorage;
-
-#[wasm_bindgen]
-extern "C" {
-    // Use `js_namespace` here to bind `console.log(..)` instead of just
-    // `log(..)`
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-
-    // The `console.log` is quite polymorphic, so we can bind it with multiple
-    // signatures. Note that we need to use `js_name` to ensure we always call
-    // `log` in JS.
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_u32(a: u32);
-
-    // Multiple arguments too!
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_many(a: &str, b: &str);
-}
-
-macro_rules! console_log {
-    // Note that this is using the `log` function imported above during
-    // `bare_bones`
-    ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
-}
-
-
-
 
 fn scale(value: f64, left_min: f64, left_max: f64, right_min: f64, right_max: f64) -> f64 {
   let left_span = left_max - left_min;
@@ -114,12 +84,11 @@ impl MandelbrotSet {
         let height = self.height as u32;
         let width = self.width as u32;
         
-        let mut data = Vec::new();
+        let data_length = (height as usize) * (width as usize) * 4;
+        let mut data = Vec::with_capacity(data_length);
 
         for y in 0..height {
             for x in 0..width {
-                // console_log!("Hello world [{} {}]!", x, y);
-
                 let c = Complex::new(
                     scale(x as f64, 0.0, self.width, min_corner.get_a(), max_corner.get_a()),
                     scale(y as f64, 0.0, self.height, min_corner.get_b(), max_corner.get_b())
@@ -128,14 +97,12 @@ impl MandelbrotSet {
                 let n = self.iterations_until_it_escapes(c, max_iterations);
                 let color = iterations_to_color(n, max_iterations);
                 data.push(color.get_r());
-                data.push(color.get_g(),);
+                data.push(color.get_g());
                 data.push(color.get_b());
-                data.push(255);
+                data.push(color.get_alpha());
             }
         }
 
-
-        console_log!("El tamaño del vector es, {}", data.len());
         let data = ImageData::new_with_u8_clamped_array_and_sh(Clamped(&mut data), width, height)?;
         ctx.put_image_data(&data, 0.0, 0.0)
     }
