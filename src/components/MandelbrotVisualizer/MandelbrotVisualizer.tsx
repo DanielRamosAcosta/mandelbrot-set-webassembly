@@ -52,7 +52,7 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
     )
     setTimeout(() => {
       console.time("RENDER")
-      this.mandelbrotSet.render(this.canvasCtx)
+      this.mandelbrotSet.render(this.canvasCtx, this.props.maxIterations)
       console.timeEnd("RENDER")
     }, 50)
   }

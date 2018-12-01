@@ -67,10 +67,9 @@ impl MandelbrotSet {
         return max_iterations;
     }
 
-    pub fn render(&mut self, ctx: &CanvasRenderingContext2d) -> Result<(), JsValue> {
+    pub fn render(&mut self, ctx: &CanvasRenderingContext2d, max_iterations: u32) -> Result<(), JsValue> {
         let min_corner = &self.min_corner;
         let max_corner = &self.max_corner;
-        let max_iterations: u32 = 500;
         let height = self.height as u32;
         let width = self.width as u32;
         
