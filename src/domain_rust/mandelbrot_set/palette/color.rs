@@ -27,15 +27,15 @@ impl Color {
 
 
     pub fn get_r(&self) -> u8 {
-        (self.r * 255.0) as u8
+        (self.r * 255.0).round() as u8
     }
 
     pub fn get_g(&self) -> u8 {
-        (self.g * 255.0) as u8
+        (self.g * 255.0).round() as u8
     }
 
     pub fn get_b(&self) -> u8 {
-        (self.b * 255.0) as u8
+        (self.b * 255.0).round() as u8
     }
 
     pub fn get_alpha(&self) -> u8 {

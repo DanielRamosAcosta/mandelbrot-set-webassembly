@@ -105,71 +105,6 @@ export function __widl_f_new_with_u8_clamped_array_and_sh_ImageData(arg0, arg1, 
     }
 }
 
-function freeColor(ptr) {
-
-    wasm.__wbg_color_free(ptr);
-}
-/**
-*/
-export class Color {
-
-    static __wrap(ptr) {
-        const obj = Object.create(Color.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    free() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-        freeColor(ptr);
-    }
-
-    /**
-    * @param {number} arg0
-    * @param {number} arg1
-    * @param {number} arg2
-    * @returns {Color}
-    */
-    static new(arg0, arg1, arg2) {
-        return Color.__wrap(wasm.color_new(arg0, arg1, arg2));
-    }
-    /**
-    * @param {Color} arg0
-    * @param {Color} arg1
-    * @param {number} arg2
-    * @returns {Color}
-    */
-    static color_between(arg0, arg1, arg2) {
-        return Color.__wrap(wasm.color_color_between(arg0.ptr, arg1.ptr, arg2));
-    }
-    /**
-    * @returns {number}
-    */
-    get_r() {
-        return wasm.color_get_r(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_g() {
-        return wasm.color_get_g(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_b() {
-        return wasm.color_get_b(this.ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get_alpha() {
-        return wasm.color_get_alpha(this.ptr);
-    }
-}
-
 function freeMandelbrotSet(ptr) {
 
     wasm.__wbg_mandelbrotset_free(ptr);
@@ -275,6 +210,71 @@ export class MandelbrotSet {
 
         }
 
+    }
+}
+
+function freeColor(ptr) {
+
+    wasm.__wbg_color_free(ptr);
+}
+/**
+*/
+export class Color {
+
+    static __wrap(ptr) {
+        const obj = Object.create(Color.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeColor(ptr);
+    }
+
+    /**
+    * @param {number} arg0
+    * @param {number} arg1
+    * @param {number} arg2
+    * @returns {Color}
+    */
+    static new(arg0, arg1, arg2) {
+        return Color.__wrap(wasm.color_new(arg0, arg1, arg2));
+    }
+    /**
+    * @param {Color} arg0
+    * @param {Color} arg1
+    * @param {number} arg2
+    * @returns {Color}
+    */
+    static color_between(arg0, arg1, arg2) {
+        return Color.__wrap(wasm.color_color_between(arg0.ptr, arg1.ptr, arg2));
+    }
+    /**
+    * @returns {number}
+    */
+    get_r() {
+        return wasm.color_get_r(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_g() {
+        return wasm.color_get_g(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_b() {
+        return wasm.color_get_b(this.ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get_alpha() {
+        return wasm.color_get_alpha(this.ptr);
     }
 }
 
