@@ -1,23 +1,20 @@
-import { Color } from "../../../domain_ts/Color"
-import { RenderDataStorage } from "../../../domain_ts/MandelbrotSet"
+import { Color } from "./Color"
 
 /**
  * Allows drawing per-pixel in a Canvas
  * Main idea from: https://gist.github.com/biovisualize/5400576
  */
-export class CanvasPixelDrawer implements RenderDataStorage {
+export class CanvasPixelDrawer {
   private imageData: ImageData
   private width: number
   private height: number
   private buf8: Uint8ClampedArray
   private data: Uint32Array
 
-  constructor(canvas: HTMLCanvasElement) {
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-  
-    this.imageData = ctx.createImageData(canvas.width, canvas.height)
-    this.width = canvas.width
-    this.height = canvas.height
+  constructor(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    this.imageData = ctx.createImageData(width, height)
+    this.width = width
+    this.height = height
 
     const buf = new ArrayBuffer(this.imageData.data.length)
     this.buf8 = new Uint8ClampedArray(buf)

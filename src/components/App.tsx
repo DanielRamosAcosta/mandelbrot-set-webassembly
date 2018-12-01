@@ -4,7 +4,7 @@ import { RenderOptions } from './RenderOptions/RenderOptions';
 
 class App extends Component {
   state = {
-    maxIterations: 500,
+    maxIterations: 100,
     renderingKey: Math.random(),
     minCornerA: "",
     minCornerB: "",

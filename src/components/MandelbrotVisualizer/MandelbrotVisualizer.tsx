@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 
-import classes from './MandelbrotVisualizer.module.css'
 import { MandelbrotSet } from "../../domain_ts/MandelbrotSet";
-import { CanvasPixelDrawer } from "./utils/CanvasPixelDrawer";
 import RegionSelectableCanvas from "../RegionSelectableCanvas/RegionSelectableCanvas";
-import { Color } from "../../domain_ts/Color";
+import classes from './MandelbrotVisualizer.module.css'
 
 interface MandelbrotVisualizerProps {
   maxIterations: number
@@ -14,14 +12,12 @@ interface MandelbrotVisualizerProps {
 
 class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
   private mandelbrotSet: MandelbrotSet
-  private canvasPixelDrawer: CanvasPixelDrawer
   private canvasCtx: CanvasRenderingContext2D
 
   constructor (props: any) {
     super(props)
 
     this.mandelbrotSet = null as any as MandelbrotSet
-    this.canvasPixelDrawer = null as any as CanvasPixelDrawer
     this.canvasCtx = null as any as CanvasRenderingContext2D
   }
 
@@ -32,7 +28,6 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
   }
 
   onRef = (canvas: HTMLCanvasElement) => {
-    this.canvasPixelDrawer = new CanvasPixelDrawer(canvas)
     this.canvasCtx = canvas.getContext('2d') as CanvasRenderingContext2D 
     this.mandelbrotSet = new MandelbrotSet(canvas.width, canvas.height)
     this.refreshCanvas()    
@@ -52,11 +47,8 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
     )
     setTimeout(() => {
       console.time("RENDER")
-      this.mandelbrotSet.render(this.canvasPixelDrawer, {
-        maxIterations: this.props.maxIterations
-      })
+      this.mandelbrotSet.render(this.canvasCtx, this.props.maxIterations)
       console.timeEnd("RENDER")
-      this.canvasCtx.putImageData(this.canvasPixelDrawer.toImageData(), 0, 0);
     }, 50)
   }
 

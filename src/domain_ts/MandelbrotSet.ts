@@ -2,25 +2,14 @@
 import { Complex } from './Complex';
 import { iterationsToColor } from './mandelbrot-themes';
 import { scale } from './scale';
-import { Color } from './Color';
-
-type RenderingOptions = {
-  minCorner?: Complex
-  maxCorner?: Complex
-  maxIterations?: number
-}
-
-export interface RenderDataStorage {
-  getHeight: () => number
-  getWidth: () => number
-  setColor: (x: number, y: number, color: Color) => void
-}
+import { CanvasPixelDrawer } from './CanvasPixelDrawer';
 
 export class MandelbrotSet {
   private minCorner: Complex
   private maxCorner: Complex
   private width: number
   private height: number
+  private canvasPixelDrawer: CanvasPixelDrawer | null
 
   constructor(width: number, height: number) {
     this.width = width
@@ -31,7 +20,7 @@ export class MandelbrotSet {
     
     this.maxCorner = new Complex(initialWidth, initialWidth * ratio)
     this.minCorner = new Complex(-initialWidth, -initialWidth * ratio)
-    
+    this.canvasPixelDrawer = null
   }
 
   public minCornerA () { return this.minCorner.getA().toString() }
@@ -63,11 +52,18 @@ export class MandelbrotSet {
     return maxIterations;
   }
 
-  render(dataStorage: RenderDataStorage, {
-    minCorner = this.minCorner,
-    maxCorner = this.maxCorner,
-    maxIterations = 100
-  }: RenderingOptions) {
+  getDataStorage (ctx: CanvasRenderingContext2D): CanvasPixelDrawer {
+    if (!this.canvasPixelDrawer) {
+      this.canvasPixelDrawer = new CanvasPixelDrawer(ctx, this.width, this.height)
+    }
+    return this.canvasPixelDrawer
+  }
+
+  render(ctx: CanvasRenderingContext2D, maxIterations = 100) {
+    const minCorner = this.minCorner
+    const maxCorner = this.maxCorner
+    const dataStorage = this.getDataStorage(ctx)
+
     for (let y = 0; y < dataStorage.getHeight(); y++) {
       for (let x = 0; x < dataStorage.getWidth(); x++) {
         const c = new Complex(
@@ -81,6 +77,6 @@ export class MandelbrotSet {
       }
     }
 
-    return dataStorage
+    ctx.putImageData(dataStorage.toImageData(), 0, 0);
   }
 }
