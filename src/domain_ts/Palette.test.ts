@@ -24,8 +24,8 @@ describe('EarthAndSky', () => {
   it.each(data)('palette of %s at %f', (theme: Themes, point: number, expectedColor: Color) => {
     const palette: Palette = Palette.createStandardPalette(theme)
 
-    const color = palette.getColor(point).intoRGBTuple()
-
-    expect(color).toEqual(expectedColor)
+    const color = palette.getColor(point)
+    
+    expect([color.getR(), color.getG(), color.getB()]).toEqual(expectedColor)
   })
 })

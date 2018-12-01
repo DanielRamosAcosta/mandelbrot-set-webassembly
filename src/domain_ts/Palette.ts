@@ -1,4 +1,4 @@
-import { Color, ColorSpace } from "./Color";
+import { Color } from "./Color";
 import { Themes, THEMES_MAP } from "./Themes";
 
 export type DivisionPoints = number[];

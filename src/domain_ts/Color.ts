@@ -1,10 +1,3 @@
-type RGBTuple = [number, number, number]
-
-export enum ColorSpace {
-  HSB,
-  RGB
-}
-
 export class Color {
   constructor (private red: number, private green: number, private blue: number) {
   }
@@ -27,13 +20,5 @@ export class Color {
       green / 255,
       blue / 255,
     );
-  }
-
-  public intoRGBTuple (): RGBTuple {
-    return [
-      this.getR(),
-      this.getG(),
-      this.getB()
-    ]
   }
 }
