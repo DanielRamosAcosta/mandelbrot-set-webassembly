@@ -8,6 +8,134 @@ mod color;
 use self::numbers::Complex;
 use self::color::Color;
 
+
+type DivisionPoints = Vec<f64>;
+type DivisionColors = Vec<Color>;
+
+enum Theme {
+  GrayScale,
+  CyclicGrayScale,
+  RedCyan,
+  BlueGold,
+  EarthAndSky,
+  HotAndCold,
+  Fire,
+  TreeColors,
+  SeaShore
+}
+
+struct Palette {
+    division_points: DivisionPoints,
+    division_colors: DivisionColors,
+}
+
+impl Palette {
+    pub fn new(division_points: DivisionPoints, division_colors: DivisionColors) -> Palette {
+        Palette{
+            division_points,
+            division_colors
+        }
+    }
+
+    pub fn get_nearest_division_point (&self, position: f64) -> usize {
+        let mut nearest_division_point = 1;
+        while (self.division_points.len() < nearest_division_point) && (position > self.division_points[nearest_division_point]) {
+            nearest_division_point = nearest_division_point + 1;
+        }
+        return nearest_division_point;
+    }
+
+    /**
+     * Resturns the Color that corresponds to the given Position
+     * @param position Value between 0 and 1
+     */
+    pub fn get_color(&self, position: f64) -> Color {
+        let nearest_division_index = self.get_nearest_division_point(position);
+        let left_point = self.division_points[nearest_division_index - 1];
+        let right_point = self.division_points[nearest_division_index];
+
+        let ratio = (position - left_point) / (right_point - left_point);
+
+        return Color::color_between(
+            &self.division_colors[nearest_division_index - 1],
+            &self.division_colors[nearest_division_index],
+            ratio
+        )
+    }
+
+    pub fn create_standard_palette(theme: Theme) -> Palette {
+        match theme {
+            Theme::GrayScale => Palette::new(
+                vec![0.0, 0.1],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(0.0, 0.0, 0.0),
+                ],
+            ),
+            Theme::CyclicGrayScale => Palette::new(
+                vec![0.0, 0.1],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(0.0, 0.0, 0.0),
+                ],
+            ),
+            Theme::RedCyan => Palette::new(
+                vec![0.0, 0.1],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(0.0, 0.0, 0.0),
+                ],
+            ),
+            Theme::BlueGold => Palette::new(
+                vec![0.0, 0.1],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(0.0, 0.0, 0.0),
+                ],
+            ),
+            Theme::EarthAndSky => Palette::new(
+                vec![0.0, 0.15, 0.33, 0.67, 0.85, 1.0],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(1.0, 0.8, 0.0),
+                    Color::new(0.53, 0.12, 0.075),
+                    Color::new(0.0, 0.0, 0.6),
+                    Color::new(0.0, 0.4, 1.0),
+                    Color::new(1.0, 1.0, 1.0),
+                ],
+            ),
+            Theme::HotAndCold => Palette::new(
+                vec![0.0, 0.1],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(0.0, 0.0, 0.0),
+                ],
+            ),
+            Theme::Fire => Palette::new(
+                vec![0.0, 0.1],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(0.0, 0.0, 0.0),
+                ],
+            ),
+            Theme::TreeColors => Palette::new(
+                vec![0.0, 0.1],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(0.0, 0.0, 0.0),
+                ],
+            ),
+            Theme::SeaShore => Palette::new(
+                vec![0.0, 0.1],
+                vec![
+                    Color::new(1.0, 1.0, 1.0),
+                    Color::new(0.0, 0.0, 0.0),
+                ],
+            ),
+        }
+    }
+}
+
 fn scale(value: f64, left_min: f64, left_max: f64, right_min: f64, right_max: f64) -> f64 {
   let left_span = left_max - left_min;
   let right_span = right_max - right_min;
@@ -15,14 +143,8 @@ fn scale(value: f64, left_min: f64, left_max: f64, right_min: f64, right_max: f6
   return right_min + (value_scaled * right_span);
 }
 
-fn iterations_to_color(n: u32, max_iterations: u32) -> Color {
-  if n == max_iterations {
-    return Color::new(0.0, 0.0, 0.0);
-  }
-
-  let brightness = scale(n.into(), 0.0, max_iterations.into(), 0.0, 1.0);
-  
-  return Color::new(brightness, brightness, brightness);
+fn iterations_to_color(palette: &Palette, n: u32, max_iterations: u32) -> Color {
+    return palette.get_color(scale(n.into(), 0.0, max_iterations.into(), 0.0, 1.0));
 }
 
 #[wasm_bindgen]
@@ -80,12 +202,14 @@ impl MandelbrotSet {
     pub fn render(&mut self, ctx: &CanvasRenderingContext2d) -> Result<(), JsValue> {
         let min_corner = &self.min_corner;
         let max_corner = &self.max_corner;
-        let max_iterations: u32 = 100;
+        let max_iterations: u32 = 500;
         let height = self.height as u32;
         let width = self.width as u32;
         
         let data_length = (height as usize) * (width as usize) * 4;
         let mut data = Vec::with_capacity(data_length);
+
+        let palette: Palette = Palette::create_standard_palette(Theme::EarthAndSky);
 
         for y in 0..height {
             for x in 0..width {
@@ -95,7 +219,7 @@ impl MandelbrotSet {
                 );
         
                 let n = self.iterations_until_it_escapes(c, max_iterations);
-                let color = iterations_to_color(n, max_iterations);
+                let color = iterations_to_color(&palette, n, max_iterations);
                 data.push(color.get_r());
                 data.push(color.get_g());
                 data.push(color.get_b());
