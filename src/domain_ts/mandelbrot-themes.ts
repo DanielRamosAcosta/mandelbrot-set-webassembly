@@ -22,7 +22,7 @@ function greyScaleTheme(n: number, maxIterations: number) {
   return Color.fromRGB(brightness, brightness, brightness);
 }
 
-const palette = Palette.createStandardPalette(Themes.EarthAndSky)
+const palette = Palette.createStandardPalette(Themes.EARTH_AND_SKY)
 
 function byDavidEck(n: number, maxIterations: number) {
   const [r, g, b] = palette.getColor(scale(n, 0, maxIterations, 0, 1))
