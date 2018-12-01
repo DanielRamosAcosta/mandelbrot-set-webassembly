@@ -1,52 +1,70 @@
-export class Color {
-  private r: number
-  private g: number
-  private b: number
+type RGBTuple = [number, number, number]
 
-  constructor(r: number, g: number, b: number) {
-    this.r = r;
-    this.g = g;
-    this.b = b;
-  }
-
-  static fromRGB(r: number, g: number, b: number) {
-    return new Color(r, g, b);
-  }
-
-  static fromHSL(h: number, s: number, l: number) {
-    const [ r, g, b ] = hslToRgb(h, s, l)
-    return new Color(r, g, b)
-  }
-
-  getR() { return this.r; }
-  getG() { return this.g; }
-  getB() { return this.b; }
+export enum ColorSpace {
+  HSB,
+  RGB
 }
 
-// External
-function hslToRgb(h: number, s: number, l: number) {
-  let r;
-  let g;
-  let b;
+type Conversion = (
+  v: number,
+  p: number,
+  q: number,
+  t: number,
+) => Color
 
-  if (s == 0) {
-    r = g = b = l; // achromatic
-  } else {
-    const hue2rgb = function hue2rgb(p: number, q: number, t: number) {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1 / 6) return p + (q - p) * 6 * t;
-      if (t < 1 / 2) return q;
-      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-      return p;
-    };
+type ConversionTable = {
+  [key: number]: Conversion
+}
 
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
-    r = hue2rgb(p, q, h + 1 / 3);
-    g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1 / 3);
+const ConversionTableHSB: ConversionTable = {
+  [0]: (v, p, q, t) => new Color(v, t, p),
+  [1]: (v, p, q, t) => new Color(q, v, p),
+  [2]: (v, p, q, t) => new Color(p, v, t),
+  [3]: (v, p, q, t) => new Color(p, q, v),
+  [4]: (v, p, q, t) => new Color(t, p, v),
+  [5]: (v, p, q, t) => new Color(v, p, q),
+  [6]: (v, p, q, t) => new Color(0, 0, 0),
+}
+
+export class Color {
+  constructor (private red: number, private green: number, private blue: number) {
   }
 
-  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+  getR() { return Math.round(this.red * 255) }
+  getG() { return Math.round(this.green * 255) }
+  getB() { return Math.round(this.blue * 255) }
+
+  static colorBetween (c1: Color, c2: Color, ratio: number): Color {
+    const a = c1.red + ratio * (c2.red - c1.red);
+    const b = c1.green + ratio * (c2.green - c1.green);
+    const c = c1.blue + ratio * (c2.blue - c1.blue);
+
+    return new Color(a, b, c);
+  }
+
+  static fromRGB (red: number, green: number, blue: number) {
+    return new Color(
+      red / 255,
+      green / 255,
+      blue / 255,
+    );
+  }
+
+  static fromHSB (normalizedHue: number, normalizedSaturation: number, normalizedValue: number): Color {
+    const region = Math.floor(normalizedHue * 6);
+    const regionDecimal = (normalizedHue * 6) - region;
+    const p = normalizedValue * (1 - normalizedSaturation);
+    const q = normalizedValue * (1 - regionDecimal * normalizedSaturation);
+    const t = normalizedValue * (1 - (1 - regionDecimal) * normalizedSaturation);
+    
+    return ConversionTableHSB[region](normalizedValue, p, q, t)
+  }
+
+  public intoRGBTuple (): RGBTuple {
+    return [
+      this.getR(),
+      this.getG(),
+      this.getB()
+    ]
+  }
 }
