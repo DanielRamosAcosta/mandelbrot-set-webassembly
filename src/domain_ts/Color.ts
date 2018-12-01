@@ -5,27 +5,6 @@ export enum ColorSpace {
   RGB
 }
 
-type Conversion = (
-  v: number,
-  p: number,
-  q: number,
-  t: number,
-) => Color
-
-type ConversionTable = {
-  [key: number]: Conversion
-}
-
-const ConversionTableHSB: ConversionTable = {
-  [0]: (v, p, q, t) => new Color(v, t, p),
-  [1]: (v, p, q, t) => new Color(q, v, p),
-  [2]: (v, p, q, t) => new Color(p, v, t),
-  [3]: (v, p, q, t) => new Color(p, q, v),
-  [4]: (v, p, q, t) => new Color(t, p, v),
-  [5]: (v, p, q, t) => new Color(v, p, q),
-  [6]: (v, p, q, t) => new Color(0, 0, 0),
-}
-
 export class Color {
   constructor (private red: number, private green: number, private blue: number) {
   }
@@ -48,16 +27,6 @@ export class Color {
       green / 255,
       blue / 255,
     );
-  }
-
-  static fromHSB (normalizedHue: number, normalizedSaturation: number, normalizedValue: number): Color {
-    const region = Math.floor(normalizedHue * 6);
-    const regionDecimal = (normalizedHue * 6) - region;
-    const p = normalizedValue * (1 - normalizedSaturation);
-    const q = normalizedValue * (1 - regionDecimal * normalizedSaturation);
-    const t = normalizedValue * (1 - (1 - regionDecimal) * normalizedSaturation);
-    
-    return ConversionTableHSB[region](normalizedValue, p, q, t)
   }
 
   public intoRGBTuple (): RGBTuple {

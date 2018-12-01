@@ -1,4 +1,5 @@
-import { Palette, Themes } from "./Palette";
+import { Palette } from "./Palette";
+import { Themes } from "./Themes";
 
 type Color = [number, number, number];
 
