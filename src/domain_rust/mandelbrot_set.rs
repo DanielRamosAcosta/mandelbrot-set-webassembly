@@ -17,12 +17,12 @@ fn scale(value: f64, left_min: f64, left_max: f64, right_min: f64, right_max: f6
 
 fn iterations_to_color(n: u32, max_iterations: u32) -> Color {
   if n == max_iterations {
-    return Color::new(0, 0, 0);
+    return Color::new(0.0, 0.0, 0.0);
   }
 
-  let brightness = scale(n.into(), 0.0, max_iterations.into(), 0.0, 255.0);
+  let brightness = scale(n.into(), 0.0, max_iterations.into(), 0.0, 1.0);
   
-  return Color::new(brightness as u8, brightness as u8, brightness as u8);
+  return Color::new(brightness, brightness, brightness);
 }
 
 #[wasm_bindgen]
@@ -80,7 +80,7 @@ impl MandelbrotSet {
     pub fn render(&mut self, ctx: &CanvasRenderingContext2d) -> Result<(), JsValue> {
         let min_corner = &self.min_corner;
         let max_corner = &self.max_corner;
-        let max_iterations: u32 = 500;
+        let max_iterations: u32 = 100;
         let height = self.height as u32;
         let width = self.width as u32;
         

@@ -2,14 +2,14 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub struct Color {
-    r: u8,
-    g: u8,
-    b: u8,
+    r: f64,
+    g: f64,
+    b: f64,
 }
 
 #[wasm_bindgen]
 impl Color {
-    pub fn new(r: u8, g: u8, b: u8) -> Color {
+    pub fn new(r: f64, g: f64, b: f64) -> Color {
         Color {
             r,
             g,
@@ -18,13 +18,13 @@ impl Color {
     }
 
     pub fn get_r(&self) -> u8 {
-        self.r
+        (self.r * 255.0) as u8
     }
     pub fn get_g(&self) -> u8 {
-        self.g
+        (self.g * 255.0) as u8
     }
     pub fn get_b(&self) -> u8 {
-        self.b
+        (self.b * 255.0) as u8
     }
     pub fn get_alpha(&self) -> u8 {
         255
