@@ -4,6 +4,7 @@ import classes from './MandelbrotVisualizer.module.css'
 import RegionSelectableCanvas from "../RegionSelectableCanvas/RegionSelectableCanvas";
 
 import { MandelbrotSet } from '../../domain_wasm/mandelbrot';
+import { sleep } from "./utils/sleep";
 const MandelbrotModule = import('../../domain_wasm/mandelbrot')
 
 interface MandelbrotVisualizerProps {
@@ -43,18 +44,15 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
     this.refreshCanvas()
   }
 
-  private refreshCanvas () {
+  private async refreshCanvas () {
     this.props.onChangeBounds(
       this.mandelbrotSet.min_corner_a(), 
       this.mandelbrotSet.min_corner_b(),
       this.mandelbrotSet.max_corner_a(), 
       this.mandelbrotSet.max_corner_b()
     )
-    setTimeout(() => {
-      console.time("RENDER")
-      this.mandelbrotSet.render(this.canvasCtx, this.props.maxIterations)
-      console.timeEnd("RENDER")
-    }, 50)
+    await sleep(50)
+    this.mandelbrotSet.render(this.canvasCtx, this.props.maxIterations)
   }
 
   render() {
