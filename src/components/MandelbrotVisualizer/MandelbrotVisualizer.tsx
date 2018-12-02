@@ -47,7 +47,9 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
       this.mandelbrotSet.maxCornerB()
     )
     await sleep(50)
+    console.time("RENDER")
     this.mandelbrotSet.render(this.canvasCtx, this.props.maxIterations)
+    console.timeEnd("RENDER")
   }
 
   render() {
