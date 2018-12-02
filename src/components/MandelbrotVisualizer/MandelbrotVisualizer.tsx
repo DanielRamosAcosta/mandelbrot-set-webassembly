@@ -44,7 +44,10 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
     this.refreshCanvas()
   }
 
-  private async refreshCanvas () {
+  private async refreshCanvas (maxIterations = 100) {
+    if (maxIterations > 500) {
+      return
+    }
     this.props.onChangeBounds(
       this.mandelbrotSet.min_corner_a(), 
       this.mandelbrotSet.min_corner_b(),
@@ -52,7 +55,10 @@ class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
       this.mandelbrotSet.max_corner_b()
     )
     await sleep(50)
-    this.mandelbrotSet.render(this.canvasCtx, this.props.maxIterations)
+    console.time("RENDER")
+    this.mandelbrotSet.render(this.canvasCtx, maxIterations)
+    console.timeEnd("RENDER")
+    this.refreshCanvas(maxIterations + 10)
   }
 
   render() {
