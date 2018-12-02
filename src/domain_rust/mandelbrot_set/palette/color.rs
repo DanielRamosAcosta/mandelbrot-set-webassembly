@@ -1,13 +1,9 @@
-use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
 pub struct Color {
     r: f64,
     g: f64,
     b: f64,
 }
 
-#[wasm_bindgen]
 impl Color {
     pub fn new(r: f64, g: f64, b: f64) -> Color {
         Color {
