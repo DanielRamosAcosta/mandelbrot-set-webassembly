@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import("./pkg/rust_webpack_template.js").catch(console.error);
+
 const App: React.FC = () => {
   return (
     <div className="App">

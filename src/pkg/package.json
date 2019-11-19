@@ -1,0 +1,16 @@
+{
+  "name": "rust-webpack-template",
+  "collaborators": [
+    "You <you@example.com>"
+  ],
+  "description": "My super awesome Rust, WebAssembly, and Webpack project!",
+  "version": "0.1.0",
+  "files": [
+    "rust_webpack_template_bg.wasm",
+    "rust_webpack_template.js",
+    "rust_webpack_template.d.ts"
+  ],
+  "module": "rust_webpack_template.js",
+  "types": "rust_webpack_template.d.ts",
+  "sideEffects": "false"
+}
