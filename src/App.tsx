@@ -2,7 +2,11 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import("./pkg/rust_webpack_template.js").catch(console.error);
+import("./pkg/rust_webpack_template.js")
+  .then(something => {
+    console.log("Yay!", something)
+  })
+  .catch(console.error);
 
 const App: React.FC = () => {
   return (
