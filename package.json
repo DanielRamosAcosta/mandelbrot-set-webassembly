@@ -33,6 +33,7 @@
     ]
   },
   "devDependencies": {
-    "@rescripts/cli": "0.0.13"
+    "@rescripts/cli": "0.0.13",
+    "@wasm-tool/wasm-pack-plugin": "^1.0.1"
   }
 }

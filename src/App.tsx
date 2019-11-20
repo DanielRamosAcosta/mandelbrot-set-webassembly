@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import("./pkg/rust_webpack_template.js")
+import("./pkg")
   .then(something => {
     console.log("Yay!", something)
   })

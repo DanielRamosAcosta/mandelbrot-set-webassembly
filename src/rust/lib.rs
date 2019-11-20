@@ -21,7 +21,7 @@ pub fn main_js() -> Result<(), JsValue> {
 
 
     // Your code goes here!
-    console::log_1(&JsValue::from_str("Hello world!"));
+    console::log_1(&JsValue::from_str("Hello World!"));
 
     Ok(())
 }
