@@ -43,7 +43,7 @@ export class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
   onRef = (canvas: HTMLCanvasElement) => {
     this.canvas = canvas
     this.canvasCtx = canvas.getContext("2d") as CanvasRenderingContext2D
-    this.mandelbrotSet = new MandelbrotSetWasm(canvas.width, canvas.height)
+    this.mandelbrotSet = new MandelbrotSetTypescript(canvas.width, canvas.height)
     this.refreshCanvas()
   }
 
