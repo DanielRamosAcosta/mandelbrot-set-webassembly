@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.cbac8828.chunk.css",
-    "main.js": "/static/js/main.9a03f885.chunk.js",
-    "main.js.map": "/static/js/main.9a03f885.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.c782542e.js",
-    "runtime-main.js.map": "/static/js/runtime-main.c782542e.js.map",
-    "static/js/2.c02a566d.chunk.js": "/static/js/2.c02a566d.chunk.js",
-    "static/js/2.c02a566d.chunk.js.map": "/static/js/2.c02a566d.chunk.js.map",
-    "static/js/3.57681478.chunk.js": "/static/js/3.57681478.chunk.js",
-    "df24eaecb09cc4710748.module.wasm": "/df24eaecb09cc4710748.module.wasm",
-    "static/js/3.57681478.chunk.js.map": "/static/js/3.57681478.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.8837974856b39f17811696ab9b239cab.js": "/precache-manifest.8837974856b39f17811696ab9b239cab.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.cbac8828.chunk.css.map": "/static/css/main.cbac8828.chunk.css.map"
+    "main.css": "/mandelbrot-set-webassembly/build-wasm/static/css/main.cbac8828.chunk.css",
+    "main.js": "/mandelbrot-set-webassembly/build-wasm/static/js/main.f08eec23.chunk.js",
+    "main.js.map": "/mandelbrot-set-webassembly/build-wasm/static/js/main.f08eec23.chunk.js.map",
+    "runtime-main.js": "/mandelbrot-set-webassembly/build-wasm/static/js/runtime-main.db03dc73.js",
+    "runtime-main.js.map": "/mandelbrot-set-webassembly/build-wasm/static/js/runtime-main.db03dc73.js.map",
+    "static/js/2.c02a566d.chunk.js": "/mandelbrot-set-webassembly/build-wasm/static/js/2.c02a566d.chunk.js",
+    "static/js/2.c02a566d.chunk.js.map": "/mandelbrot-set-webassembly/build-wasm/static/js/2.c02a566d.chunk.js.map",
+    "static/js/3.57681478.chunk.js": "/mandelbrot-set-webassembly/build-wasm/static/js/3.57681478.chunk.js",
+    "df24eaecb09cc4710748.module.wasm": "/mandelbrot-set-webassembly/build-wasm/df24eaecb09cc4710748.module.wasm",
+    "static/js/3.57681478.chunk.js.map": "/mandelbrot-set-webassembly/build-wasm/static/js/3.57681478.chunk.js.map",
+    "index.html": "/mandelbrot-set-webassembly/build-wasm/index.html",
+    "precache-manifest.d533bb8ba852208a3d350cf93fc6192b.js": "/mandelbrot-set-webassembly/build-wasm/precache-manifest.d533bb8ba852208a3d350cf93fc6192b.js",
+    "service-worker.js": "/mandelbrot-set-webassembly/build-wasm/service-worker.js",
+    "static/css/main.cbac8828.chunk.css.map": "/mandelbrot-set-webassembly/build-wasm/static/css/main.cbac8828.chunk.css.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.c782542e.js",
+    "static/js/runtime-main.db03dc73.js",
     "static/js/2.c02a566d.chunk.js",
     "static/css/main.cbac8828.chunk.css",
-    "static/js/main.9a03f885.chunk.js"
+    "static/js/main.f08eec23.chunk.js"
   ]
 }

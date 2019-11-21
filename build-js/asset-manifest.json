@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.cbac8828.chunk.css",
-    "main.js": "/static/js/main.48cc2c33.chunk.js",
-    "main.js.map": "/static/js/main.48cc2c33.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.3c7184b7.js",
-    "runtime-main.js.map": "/static/js/runtime-main.3c7184b7.js.map",
-    "static/js/2.fecfd006.chunk.js": "/static/js/2.fecfd006.chunk.js",
-    "static/js/2.fecfd006.chunk.js.map": "/static/js/2.fecfd006.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.37ec59e03156fdee3dea9651e724f681.js": "/precache-manifest.37ec59e03156fdee3dea9651e724f681.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.cbac8828.chunk.css.map": "/static/css/main.cbac8828.chunk.css.map"
+    "main.css": "/mandelbrot-set-webassembly/build-js/static/css/main.cbac8828.chunk.css",
+    "main.js": "/mandelbrot-set-webassembly/build-js/static/js/main.c0abb8ca.chunk.js",
+    "main.js.map": "/mandelbrot-set-webassembly/build-js/static/js/main.c0abb8ca.chunk.js.map",
+    "runtime-main.js": "/mandelbrot-set-webassembly/build-js/static/js/runtime-main.674b876f.js",
+    "runtime-main.js.map": "/mandelbrot-set-webassembly/build-js/static/js/runtime-main.674b876f.js.map",
+    "static/js/2.fecfd006.chunk.js": "/mandelbrot-set-webassembly/build-js/static/js/2.fecfd006.chunk.js",
+    "static/js/2.fecfd006.chunk.js.map": "/mandelbrot-set-webassembly/build-js/static/js/2.fecfd006.chunk.js.map",
+    "index.html": "/mandelbrot-set-webassembly/build-js/index.html",
+    "precache-manifest.cfcce026ecff05cbeea1fa01e030d92b.js": "/mandelbrot-set-webassembly/build-js/precache-manifest.cfcce026ecff05cbeea1fa01e030d92b.js",
+    "service-worker.js": "/mandelbrot-set-webassembly/build-js/service-worker.js",
+    "static/css/main.cbac8828.chunk.css.map": "/mandelbrot-set-webassembly/build-js/static/css/main.cbac8828.chunk.css.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.3c7184b7.js",
+    "static/js/runtime-main.674b876f.js",
     "static/js/2.fecfd006.chunk.js",
     "static/css/main.cbac8828.chunk.css",
-    "static/js/main.48cc2c33.chunk.js"
+    "static/js/main.c0abb8ca.chunk.js"
   ]
 }
