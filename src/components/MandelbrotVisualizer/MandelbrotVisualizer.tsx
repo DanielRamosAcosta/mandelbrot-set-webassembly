@@ -43,7 +43,7 @@ export class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
   onRef = (canvas: HTMLCanvasElement) => {
     this.canvas = canvas
     this.canvasCtx = canvas.getContext("2d") as CanvasRenderingContext2D
-    this.mandelbrotSet = new MandelbrotSetTypescript(canvas.width, canvas.height)
+    this.mandelbrotSet = new MandelbrotSetWasm(canvas.width, canvas.height)
     this.refreshCanvas()
   }
 
@@ -66,8 +66,9 @@ export class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
       maxCornerB: await this.mandelbrotSet.maxCornerB(),
     })
     await sleep(50)
-
+    console.time("render")
     const clamped: Uint8ClampedArray = await this.mandelbrotSet.render(this.props.maxIterations)
+    console.timeEnd("render")
     const imageData = new ImageData(clamped, this.canvas.width, this.canvas.height)
     this.canvasCtx.putImageData(imageData, 0, 0)
   }
