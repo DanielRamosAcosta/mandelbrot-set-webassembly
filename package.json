@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@rescripts/cli": "0.0.13",
-    "@wasm-tool/wasm-pack-plugin": "^1.0.1"
+    "@wasm-tool/wasm-pack-plugin": "^1.0.1",
+    "prettier": "^1.19.1"
   }
 }

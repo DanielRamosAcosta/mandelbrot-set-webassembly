@@ -1,32 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FC, useState } from "react"
+import { MandelbrotVisualizer } from "./components/MandelbrotVisualizer/MandelbrotVisualizer"
+import { RenderOptions } from "./components/RenderOptions/RenderOptions"
 
-import("./pkg")
-  .then(something => {
-    console.log("Yay!", something)
+export const App: FC = () => {
+  const [maxIterations, setMaxIterations] = useState(100)
+  const [renderingKey, setRenderingKey] = useState(Math.random())
+  const [corners, setCorners] = useState({
+    minCornerA: "",
+    minCornerB: "",
+    maxCornerA: "",
+    maxCornerB: "",
   })
-  .catch(console.error);
 
-const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <MandelbrotVisualizer
+        renderingKey={renderingKey}
+        maxIterations={maxIterations}
+        onChangeBounds={setCorners}
+      />
+      <RenderOptions
+        onChangeMaxIterations={setMaxIterations}
+        maxIterations={maxIterations}
+        refresh={() => setRenderingKey(Math.random())}
+        corners={corners}
+      />
     </div>
-  );
+  )
 }
-
-export default App;

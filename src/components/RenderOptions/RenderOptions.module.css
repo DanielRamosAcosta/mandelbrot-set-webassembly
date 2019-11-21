@@ -1,0 +1,6 @@
+.container {
+  top: 0;
+  right: 0;
+  position: fixed;
+  width: 300px;
+}
