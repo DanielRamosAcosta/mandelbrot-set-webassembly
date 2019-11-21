@@ -2,9 +2,9 @@
 import { Complex } from "./Complex"
 import { iterationsToColor } from "./mandelbrot-themes"
 import { scale } from "./scale"
-import { Matrix } from "./Matrix"
+import { IMandelbrotSet } from "../../domain/MandelbrotSet"
 
-export class MandelbrotSetJavaScript {
+export class MandelbrotSetTypescript implements IMandelbrotSet {
   private minCorner: Complex
   private maxCorner: Complex
   private width: number
@@ -21,20 +21,20 @@ export class MandelbrotSetJavaScript {
     this.minCorner = new Complex(-initialWidth, -initialWidth * ratio)
   }
 
-  public minCornerA() {
+  public async minCornerA() {
     return this.minCorner.getA().toString()
   }
-  public minCornerB() {
+  public async minCornerB() {
     return this.minCorner.getB().toString()
   }
-  public maxCornerA() {
+  public async maxCornerA() {
     return this.maxCorner.getA().toString()
   }
-  public maxCornerB() {
+  public async maxCornerB() {
     return this.maxCorner.getB().toString()
   }
 
-  zoomCanvas(startXPx: number, endXPx: number, startYPx: number, endYPx: number) {
+  async zoomCanvas(startXPx: number, endXPx: number, startYPx: number, endYPx: number) {
     const minCornerA = scale(startXPx, 0, this.width, this.minCorner.getA(), this.maxCorner.getA())
     const maxCornerA = scale(endXPx, 0, this.width, this.minCorner.getA(), this.maxCorner.getA())
     const minCornerB = scale(startYPx, 0, this.height, this.minCorner.getB(), this.maxCorner.getB())
@@ -44,7 +44,7 @@ export class MandelbrotSetJavaScript {
     this.maxCorner = new Complex(maxCornerA, maxCornerB)
   }
 
-  iterationsUntilItEscapes(c: Complex, maxIterations: number) {
+  private iterationsUntilItEscapes(c: Complex, maxIterations: number) {
     let z = new Complex(0, 0)
 
     for (let n = 0; n < maxIterations; n++) {
@@ -57,10 +57,11 @@ export class MandelbrotSetJavaScript {
     return maxIterations
   }
 
-  render2(maxIterations = 100) {
+  async render(maxIterations = 100): Promise<Uint8ClampedArray> {
     const minCorner = this.minCorner
     const maxCorner = this.maxCorner
-    const matrix = new Matrix(this.width, this.height)
+
+    const colors = []
 
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
@@ -71,14 +72,13 @@ export class MandelbrotSetJavaScript {
 
         const n = this.iterationsUntilItEscapes(c, maxIterations)
         const color = iterationsToColor(n, maxIterations)
-        matrix.setColor(x, y, {
-          r: color.getR(),
-          g: color.getG(),
-          b: color.getB(),
-        })
+        colors.push(color.getR())
+        colors.push(color.getG())
+        colors.push(color.getB())
+        colors.push(255)
       }
     }
 
-    return matrix
+    return new Uint8ClampedArray(colors)
   }
 }

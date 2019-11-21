@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react"
-import { MandelbrotVisualizer } from "./components/MandelbrotVisualizer/MandelbrotVisualizer"
-import { RenderOptions } from "./components/RenderOptions/RenderOptions"
+import { MandelbrotVisualizer } from "../MandelbrotVisualizer/MandelbrotVisualizer"
+import { RenderOptions } from "../RenderOptions/RenderOptions"
 
 export const App: FC = () => {
   const [maxIterations, setMaxIterations] = useState(100)

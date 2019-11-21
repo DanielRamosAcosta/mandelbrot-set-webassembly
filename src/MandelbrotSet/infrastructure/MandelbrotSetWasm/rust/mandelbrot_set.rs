@@ -67,7 +67,7 @@ impl MandelbrotSet {
         return max_iterations;
     }
 
-    pub fn render(&mut self, ctx: &CanvasRenderingContext2d, max_iterations: u32) -> Clamped<Vec<u8>> {
+    pub fn render(&mut self, max_iterations: u32) -> Clamped<Vec<u8>> {
         let min_corner = &self.min_corner;
         let max_corner = &self.max_corner;
         let height = self.height as u32;

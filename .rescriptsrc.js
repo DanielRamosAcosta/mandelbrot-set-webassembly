@@ -1,17 +1,17 @@
-const path = require("path");
-const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+const path = require("path")
+const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin")
 
-const not = fn => (...args) => !fn(...args);
+const not = fn => (...args) => !fn(...args)
 
-const ruleIsOneOf = rule => Boolean(rule.oneOf);
-const ruleIsNotOneOf = not(ruleIsOneOf);
+const ruleIsOneOf = rule => Boolean(rule.oneOf)
+const ruleIsNotOneOf = not(ruleIsOneOf)
 
-const loaderIsFileLoader = rule => /file-loader/.test(rule.loader);
-const loaderIsNotFileLoader = not(loaderIsFileLoader);
+const loaderIsFileLoader = rule => /file-loader/.test(rule.loader)
+const loaderIsNotFileLoader = not(loaderIsFileLoader)
 
 const excludeWasm = config => {
-  const ruleWithOneOf = config.module.rules.find(ruleIsOneOf);
-  const fileLoaderRule = ruleWithOneOf.oneOf.find(loaderIsFileLoader);
+  const ruleWithOneOf = config.module.rules.find(ruleIsOneOf)
+  const fileLoaderRule = ruleWithOneOf.oneOf.find(loaderIsFileLoader)
 
   return {
     ...config,
@@ -24,37 +24,36 @@ const excludeWasm = config => {
             ...ruleWithOneOf.oneOf.filter(loaderIsNotFileLoader),
             {
               ...fileLoaderRule,
-              exclude: fileLoaderRule.exclude.concat(/\.wasm$/)
-            }
-          ]
-        }
-      ]
-    }
-  };
-};
+              exclude: fileLoaderRule.exclude.concat(/\.wasm$/),
+            },
+          ],
+        },
+      ],
+    },
+  }
+}
 
-excludeWasm.isMiddleware = true;
+excludeWasm.isMiddleware = true
 
 const addWasmpPlugin = config => {
-  const watchDirectories = [path.resolve(__dirname, "src/rust")]
+  const watchDirectories = [
+    path.resolve(__dirname, "src/MandelbrotSet/infrastructure/MandelbrotSetWasm/rust"),
+  ]
 
   const wasmPackPlugin = new WasmPackPlugin({
     crateDirectory: __dirname,
-    outDir: "src/pkg",
-    watchDirectories
-  });
+    outDir: "src/MandelbrotSet/infrastructure/MandelbrotSetWasm/pkg",
+    watchDirectories,
+  })
 
   wasmPackPlugin.watchDirectories = watchDirectories
 
   return {
     ...config,
-    plugins: [
-      ...config.plugins,
-      wasmPackPlugin
-    ]
-  };
-};
+    plugins: [...config.plugins, wasmPackPlugin],
+  }
+}
 
-addWasmpPlugin.isMiddleware = true;
+addWasmpPlugin.isMiddleware = true
 
-module.exports = [excludeWasm, addWasmpPlugin];
+module.exports = [excludeWasm, addWasmpPlugin]
