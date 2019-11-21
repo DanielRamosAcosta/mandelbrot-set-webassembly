@@ -4,11 +4,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/mandelbrot-set-webassembly/build-wasm/df24eaecb09cc4710748.module.wasm"
   },
   {
-    "revision": "3f1b6e115a7c339e5763afe91c5e1d42",
+    "revision": "45a60955862ca0d942a62a51b1f02eef",
     "url": "/mandelbrot-set-webassembly/build-wasm/index.html"
   },
   {
-    "revision": "998ea833cc13205e72c0",
+    "revision": "e8177a9eb0929de38d86",
     "url": "/mandelbrot-set-webassembly/build-wasm/static/css/main.cbac8828.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/mandelbrot-set-webassembly/build-wasm/static/js/3.57681478.chunk.js"
   },
   {
-    "revision": "998ea833cc13205e72c0",
-    "url": "/mandelbrot-set-webassembly/build-wasm/static/js/main.f08eec23.chunk.js"
+    "revision": "e8177a9eb0929de38d86",
+    "url": "/mandelbrot-set-webassembly/build-wasm/static/js/main.8e7d9057.chunk.js"
   },
   {
     "revision": "36f84e508fb41148d4a0",

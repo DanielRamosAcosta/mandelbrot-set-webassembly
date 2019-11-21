@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6acfb9bad5e1e503c7c7b93dde8b2fea",
+    "revision": "6b632ce8cb0107d6086e790b17d199b0",
     "url": "/mandelbrot-set-webassembly/build-js/index.html"
   },
   {
-    "revision": "2040a1e71a656f857f41",
+    "revision": "39b1bf9799aa51d180af",
     "url": "/mandelbrot-set-webassembly/build-js/static/css/main.cbac8828.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/mandelbrot-set-webassembly/build-js/static/js/2.fecfd006.chunk.js"
   },
   {
-    "revision": "2040a1e71a656f857f41",
-    "url": "/mandelbrot-set-webassembly/build-js/static/js/main.c0abb8ca.chunk.js"
+    "revision": "39b1bf9799aa51d180af",
+    "url": "/mandelbrot-set-webassembly/build-js/static/js/main.8e6047cc.chunk.js"
   },
   {
     "revision": "464b9dd676e00ff1d00d",
