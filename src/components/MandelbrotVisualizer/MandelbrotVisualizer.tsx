@@ -60,7 +60,12 @@ export class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
     startYPx: number,
     endYPx: number,
   ) => {
-    this.mandelbrotSet.zoomCanvas(startXPx, endXPx, startYPx, endYPx)
+    // this.mandelbrotSet.zoomCanvas(startXPx, endXPx, startYPx, endYPx)
+    if (classss) {
+      if (foo) {
+        foo.zoom_canvas(startXPx, endXPx, startYPx, endYPx)
+      }
+    }
     this.refreshCanvas()
   }
 
@@ -78,8 +83,11 @@ export class MandelbrotVisualizer extends Component<MandelbrotVisualizerProps> {
         foo = new classss(this.canvas.width, this.canvas.height)
       }
       console.time("RENDER")
-      foo.render(this.canvasCtx, this.props.maxIterations)
+      const something = foo.render(this.canvasCtx, this.props.maxIterations)
+      console.log(something)
       console.timeEnd("RENDER")
+      var idata = new ImageData(something, this.canvas.width, this.canvas.height)
+      this.canvasCtx.putImageData(idata, 0, 0)
     }
     /* const matrix = this.mandelbrotSet.render2(this.props.maxIterations)
     const dataStorage = new CanvasPixelDrawer(this.canvasCtx, this.canvas.width, this.canvas.height)
